@@ -2,7 +2,11 @@
 import React, { useEffect, useState } from 'react'
 import logo from '../../assets/logo.svg'
 import { Link } from 'react-router-dom'
-import { FaPhoneAlt } from "react-icons/fa";
+import { IoIosLogIn } from "react-icons/io";
+import Modal from '../modal/Modal';
+
+
+
 const Navbar = () => {
   const [isSticky, setIsSticky] = useState(false);
 
@@ -93,20 +97,22 @@ const Navbar = () => {
             </div>
           </div>
           {/* profile */}
-          <div tabIndex={0} role="button"
+          {/* <div tabIndex={0} role="button"
             className="btn btn-ghost btn-circle me-2 avatar">
             <div className="w-10 rounded-full">
               <img alt="Tailwind CSS Navbar component" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
             </div>
-          </div>
+          </div> */}
 
           {/* contact */}
-          <Link to='' className="py-2 px-4  gap-2 bg-Orange text-white rounded-full flex items-center content-center ">
-            <FaPhoneAlt />
-            Contact
-          </Link>
+          <button
+            onClick={() =>
+              document.getElementById('my_modal_5').showModal()}
+            className="py-2 px-4  gap-2 bg-Orange text-white rounded-full flex items-center content-center ">
+            <IoIosLogIn className='w-5 h-5' /> Login
+          </button>
+          <Modal />
         </div>
-
       </div>
     </>
   )
