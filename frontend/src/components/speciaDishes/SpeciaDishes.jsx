@@ -43,7 +43,6 @@ const SpeciaDishes = () => {
     fetch('/menu.json')
       .then(res => res.json())
       .then(data => {
-        console.log(data)
         const specials = data.filter(
           (item) => item.category === "popular")
         setRecipes(specials)

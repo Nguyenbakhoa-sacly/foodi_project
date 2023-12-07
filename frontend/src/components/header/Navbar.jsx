@@ -1,14 +1,18 @@
 
-import React, { useEffect, useState } from 'react'
+import React,
+{ useContext, useEffect, useState } from 'react'
 import logo from '../../assets/logo.svg'
 import { Link } from 'react-router-dom'
 import { IoIosLogIn } from "react-icons/io";
 import Modal from '../modal/Modal';
+import { AuthContext } from '../../context/AuthProvider';
 
 
 
 const Navbar = () => {
   const [isSticky, setIsSticky] = useState(false);
+  const { user } = useContext(AuthContext);
+  console.log(user);
 
   useEffect(() => {
     const handleScroll = () => {
