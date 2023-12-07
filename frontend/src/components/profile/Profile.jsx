@@ -1,7 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { AuthContext } from '../../context/AuthProvider'
 const Profile = ({ user }) => {
+  const { logOut } = useContext(AuthContext)
+  const handleLogout = () => {
 
+    logOut()
+      .then(() => {
+        alert('Logged out successfully!')
+      })
+      .catch(() => { })
+  }
   return (
     <>
       {/* profile */}
@@ -46,7 +55,7 @@ const Profile = ({ user }) => {
               <hr />
               <li>
                 <a
-                // onClick={handleLogout}
+                  onClick={handleLogout}
                 >Logout</a>
               </li>
             </ul>

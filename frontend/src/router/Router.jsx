@@ -4,7 +4,8 @@ import Main from '../layout/Main'
 import HomePage from '../pages/HomePage'
 import Menu from '../pages/Menu'
 import Signup from '../components/signup/signup'
-
+import PrivateRouter from '../components/privateRouter/PrivateRouter'
+import UpdateProfilePage from '../pages/UpdateProfilePage'
 const router = createBrowserRouter([
 
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
       {
         path: "/menu",
         element: <Menu />
+      },
+      {
+        path: "/update-profile",
+        element: <UpdateProfilePage />
       }
     ]
   }, {
