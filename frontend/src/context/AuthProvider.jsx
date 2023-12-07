@@ -7,6 +7,7 @@ import {
   createUserWithEmailAndPassword,
   getAuth,
   onAuthStateChanged,
+  signInWithEmailAndPassword,
   signInWithPopup,
   updateProfile
 } from "firebase/auth";
@@ -22,10 +23,12 @@ const AuthProvider = ({ children }) => {
 
   //create account
   const createUser = (email, password) => {
+    setIsLoading(true);
     return createUserWithEmailAndPassword(auth, email, password)
   }
   //signup with gamil
   const signUpWithGamil = () => {
+    setIsLoading(true);
     return signInWithPopup(auth, googleProvider)
   }
   //login with email and password
@@ -63,7 +66,8 @@ const AuthProvider = ({ children }) => {
     user, login, logOut,
     createUser,
     signUpWithGamil,
-    updateUserProfile
+    updateUserProfile,
+    isLoading
   };
   return (
     <AuthContext.Provider value={authInfo}>

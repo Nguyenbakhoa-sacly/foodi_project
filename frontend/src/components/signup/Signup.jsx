@@ -1,10 +1,16 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useForm } from "react-hook-form"
 import { FaGoogle, FaFacebookF, FaGithub } from 'react-icons/fa'
 import Modal from '../modal/Modal'
+import { AuthContext } from '../../context/AuthProvider'
 
 const Signup = () => {
+
+  // redirecting to home page or specifig page
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location.state?.from?.pathname || '/';
 
   const {
     register,
@@ -12,12 +18,31 @@ const Signup = () => {
     watch,
     formState: { errors },
   } = useForm()
-  const onSubmit = (data) => console.log(data)
+  const { createUser } = useContext(AuthContext);
+
+  const onSubmit = (data) => {
+    const { email, password } = data;
+    createUser(email, password)
+      .then((result) => {
+        // Signed up 
+        const user = result.user;
+        alert('Signup successful!');
+        document.getElementById("my_modal_5").close()
+        navigate(from, { replace: true })
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ..
+      });
+  }
 
   return (
     <div className=' max-w-md bg-white shadow w-full mx-auto my-20 items-center justify-center '>
       <h3 className='font-bold text-3xl text-orange text-center'>Create Account!</h3>
-      <form className="card-body">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="card-body">
 
         {/* email */}
         <div className="form-control">
@@ -52,7 +77,7 @@ const Signup = () => {
         <div className="form-control mt-6">
           <input
             type="submit"
-            value="Login"
+            value="Sign up"
             className="btn text-white bg-Orange hover:bg-amber-500 border-none btn-primary"
           />
         </div>

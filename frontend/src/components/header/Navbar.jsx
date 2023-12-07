@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import { IoIosLogIn } from "react-icons/io";
 import Modal from '../modal/Modal';
 import { AuthContext } from '../../context/AuthProvider';
+import Profile from '../profile/Profile';
 
 
 
@@ -100,21 +101,17 @@ const Navbar = () => {
               <span className="badge flex items-center content-center text-white badge-sm bg-Orange w-5 h-5 rounded-full indicator-item">10</span>
             </div>
           </div>
-          {/* profile */}
-          {/* <div tabIndex={0} role="button"
-            className="btn btn-ghost btn-circle me-2 avatar">
-            <div className="w-10 rounded-full">
-              <img alt="Tailwind CSS Navbar component" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
-            </div>
-          </div> */}
 
-          {/* contact */}
-          <button
-            onClick={() =>
-              document.getElementById('my_modal_5').showModal()}
-            className="py-2 px-4  gap-2 bg-Orange text-white rounded-full flex items-center content-center ">
-            <IoIosLogIn className='w-5 h-5' /> Login
-          </button>
+          {
+            user
+              ? <> <Profile user={user} /> </>
+              : <button
+                onClick={() =>
+                  document.getElementById('my_modal_5').showModal()}
+                className="py-2 px-4  gap-2 bg-Orange text-white rounded-full flex items-center content-center ">
+                <IoIosLogIn className='w-5 h-5' /> Login
+              </button>
+          }
           <Modal />
         </div>
       </div>

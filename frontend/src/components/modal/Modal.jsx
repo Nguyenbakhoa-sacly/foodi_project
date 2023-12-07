@@ -1,10 +1,17 @@
 import React, { useContext, useState } from 'react'
 import { useForm } from "react-hook-form"
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { FaGoogle, FaFacebookF, FaGithub } from 'react-icons/fa'
 import { AuthContext } from '../../context/AuthProvider'
 
 const Modal = () => {
+  const { signUpWithGamil, login } = useContext(AuthContext);
+  const [errorMessage, setErrorMessage] = useState('')
+
+  // redirecting to home page or specifig page
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location.state?.from?.pathname || '/';
 
   const {
     register,
@@ -13,8 +20,6 @@ const Modal = () => {
     formState: { errors },
   } = useForm();
 
-  const { signUpWithGamil, login } = useContext(AuthContext);
-  const [errorMessage, setErrorMessage] = useState('')
 
   const onSubmit = (data) => {
     const { email, password } = data;
@@ -23,6 +28,8 @@ const Modal = () => {
       .then((result) => {
         const user = result.user;
         alert('Login successful!')
+        document.getElementById("my_modal_5").close()
+        navigate(from, { replace: true })
       }).catch((error) => {
         const errorMessage = error.message;
         setErrorMessage('Provider a correct email and password!')
@@ -35,6 +42,8 @@ const Modal = () => {
       const user = result.user;
       console.log(user);
       alert('Login successful!')
+      navigate(from, { replace: true })
+
     }).catch((error) => {
       console.log(error)
     });
