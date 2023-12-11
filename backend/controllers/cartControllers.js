@@ -1,22 +1,10 @@
 
 
-const Menu = require('../models/Menu');
 const Cart = require('../models/Cart');
-const { response } = require('express');
 
-const foodiControllers = {
+const cartControllers = {
 
-  // get all food items
-  getAllMenu: async (req, res) => {
-    try {
-      const menu = await Menu.find();
-      res.status(200).json(menu);
-    } catch (err) {
-      return res.status(500).json(err);
-    }
-  },
-
-  // new cart food items
+  // add to cart
   NewCartItem: async (req, res) => {
     const {
       menuItemId, email, quantity,
@@ -39,7 +27,7 @@ const foodiControllers = {
     }
   },
 
-  // get all cart items
+  // get all cart by email
   getAllCartItems: async (req, res) => {
     const { email } = req.query;
     try {
@@ -50,7 +38,7 @@ const foodiControllers = {
     }
   },
 
-  // deletproduct
+  // delete Cart
   deleteCartItem: async (req, res) => {
     const { id } = req.params;
     try {
@@ -65,28 +53,26 @@ const foodiControllers = {
     }
   },
 
-  // update carts quantity
-
+  // update cart quantity
   updataCartItems: async (req, res) => {
     const { id } = req.params;
     const { quantity, price } = req.body;
-    const result = await Cart.findById({ _id: id })
-    // Nếu không tìm thấy sản phẩm, trả về lỗi
-    if (!result) {
-      return res.status(400).json('Product not found');
+    try {
+      const result = await Cart.findById({ _id: id })
+      // Nếu không tìm thấy sản phẩm, trả về lỗi
+      if (!result) {
+        return res.status(400).json('Product not found');
+      }
+      // Cập nhật số lượng sản phẩm
+      result.quantity = quantity;
+      // result.price = price;
+      await result.save();
+      // Trả về phản hồi thành công
+      res.status(200).json('Product updated successfully!!!');
+    } catch (e) {
+      res.status(500).json('Product updated failed!!!');
     }
-    // Cập nhật số lượng sản phẩm
-    result.quantity = quantity;
-    // result.price = price;
-    await result.save();
-    // Trả về phản hồi thành công
-    res.status(200).json('Product updated successfully');
-
   }
-
-
 }
 
-
-
-module.exports = foodiControllers
+module.exports = cartControllers

@@ -40,7 +40,7 @@ const SpeciaDishes = () => {
   const slider = React.useRef(null);
 
   useEffect(() => {
-    fetch("http://localhost:3001/v1/food/menu")
+    fetch("http://localhost:3001/v1/food/product")
       .then(res => res.json())
       .then(data => {
         const specials = data.filter(
