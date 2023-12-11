@@ -40,7 +40,7 @@ const SpeciaDishes = () => {
   const slider = React.useRef(null);
 
   useEffect(() => {
-    fetch('/menu.json')
+    fetch("http://localhost:3001/v1/food/menu")
       .then(res => res.json())
       .then(data => {
         const specials = data.filter(
@@ -111,7 +111,8 @@ const SpeciaDishes = () => {
           </button>
         </div>
 
-        <Slider ref={slider} {...settings} className='overflow-hidden mt-10 space-x-5'>
+        <Slider ref={slider} {...settings}
+          className='overflow-hidden mt-10 space-x-5'>
           {recipes?.map(
             (item, index) => (
               <Cards key={index} item={item} />

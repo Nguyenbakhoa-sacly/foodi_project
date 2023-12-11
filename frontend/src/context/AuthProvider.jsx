@@ -9,6 +9,7 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signOut,
   updateProfile
 } from "firebase/auth";
 
@@ -51,11 +52,10 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unSubscribe = onAuthStateChanged(auth,
       (currentUser) => {
-        if (currentUser) {
-          setUser(currentUser);
-          setIsLoading(false);
-        } else {
-        }
+
+        setUser(currentUser);
+        setIsLoading(false);
+
       });
     return () => {
       return unSubscribe();

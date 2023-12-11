@@ -4,7 +4,6 @@ import { AuthContext } from '../../context/AuthProvider'
 const Profile = ({ user }) => {
   const { logOut } = useContext(AuthContext)
   const handleLogout = () => {
-
     logOut()
       .then(() => {
         alert('Logged out successfully!')

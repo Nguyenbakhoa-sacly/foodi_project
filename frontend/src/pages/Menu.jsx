@@ -15,7 +15,7 @@ const Menu = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch('/menu.json');
+        const res = await fetch("http://localhost:3001/v1/food/menu");
         const data = await res.json();
         // console.log(data);
         setMenu(data);
@@ -97,9 +97,8 @@ const Menu = () => {
               </button>
             </div>
           </div>
-
-
         </div>
+
         {/* menu shop section */}
         <div className='section-container'>
           <div className="flex flex-col md:flex-row flex-wrap md:justify-between items-center space-y-3 mb-8">
@@ -163,14 +162,16 @@ const Menu = () => {
               </select>
             </div>
 
-            {/* production */}
-            <div className="grid md:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-4 ">
-              {currentItems.map((item) => (
-                <Cards key={item._id} item={item} />
-              ))}
-            </div>
+
+          </div>
+          {/* production */}
+          <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 grid-cols-1 gap-4 ">
+            {currentItems.map((item) => (
+              <Cards key={item._id} item={item} />
+            ))}
           </div>
         </div>
+
         {/* Pagination */}
         <div className="flex justify-center my-8">
           {Array.from({
