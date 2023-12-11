@@ -1,12 +1,15 @@
 
-import { createBrowserRouter } from 'react-router-dom'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Main from '../layout/Main'
+import DashboardLayout from '../layout/DashboardLayout'
 import HomePage from '../pages/HomePage'
+import CartPage from '../pages/CartPage'
 import Menu from '../pages/Menu'
+import UpdateProfilePage from '../pages/UpdateProfilePage'
 import Signup from '../components/signup/signup'
 import PrivateRouter from '../components/privateRouter/PrivateRouter'
-import UpdateProfilePage from '../pages/UpdateProfilePage'
-import CartPage from '../pages/CartPage'
+import Dashboard from '../components/dashboard/admin/Dashboard'
+import Users from '../components/dashboard/admin/Users'
 const router = createBrowserRouter([
 
   {
@@ -30,7 +33,24 @@ const router = createBrowserRouter([
         element: <CartPage />
       }
     ]
-  }, {
+  },
+  {
+    path: '/dashboard',
+    element: <PrivateRouter>
+      <DashboardLayout />
+    </PrivateRouter>,
+    children: [
+      {
+        path: '',
+        element: <Dashboard />
+      },
+      {
+        path: 'users',
+        element: <Users />
+      }
+    ]
+  },
+  {
     path: "/signup",
     element: <Signup />
   }
