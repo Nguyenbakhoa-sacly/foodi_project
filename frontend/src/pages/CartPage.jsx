@@ -1,20 +1,19 @@
 import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { MdDeleteForever } from "react-icons/md";
-import useCart from '../hooks/useCart'
+import { useCart } from '../hooks/useHooks'
 import { toast } from 'react-toastify';
 import { AuthContext } from '../context/AuthProvider';
-
 
 const CartPage = () => {
   const [cart, refetch] = useCart();
   const { user } = useContext(AuthContext);
-  const [cartItems, setCartItems] = useState([])
+  const [cartItems, setCartItems] = useState([]);
   const navigate = useNavigate();
   // delete items
   const handleDelete = (id) => {
     console.log(id);
-    fetch(`http://localhost:3001/v1/food/carts/${id}`, {
+    fetch(`${import.meta.env.VITE_API}/food/carts/${id}`, {
       method: 'DELETE',
     })
       .then((res) => {
@@ -29,7 +28,7 @@ const CartPage = () => {
   // handleDecrease functional
   const handleDecrease = (item) => {
     if (item.quantity > 1) {
-      fetch(`http://localhost:3001/v1/food/carts/${item._id}`, {
+      fetch(`${import.meta.env.VITE_API}/food/carts/${item._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -56,7 +55,7 @@ const CartPage = () => {
   }
   // handleIncrease functional
   const handleIncrease = (item) => {
-    fetch(`http://localhost:3001/v1/food/carts/${item._id}`, {
+    fetch(`${import.meta.env.VITE_API}/food/carts/${item._id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -78,7 +77,6 @@ const CartPage = () => {
         setCartItems(updateCart);
       })
   }
-
   // caculate price
   const caculatePrice = (item) => {
     return item.price * item.quantity
@@ -87,7 +85,6 @@ const CartPage = () => {
   const totalPrice = cart.reduce((total, item) => {
     return total + caculatePrice(item)
   }, 0)
-  console.log(totalPrice)
 
   return (
     <>

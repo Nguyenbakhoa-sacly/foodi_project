@@ -74,3 +74,23 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+.custom-text {
+  display: block;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  /* số dòng hiển thị */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.custom-text-des {
+  display: block;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  /* số dòng hiển thị */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

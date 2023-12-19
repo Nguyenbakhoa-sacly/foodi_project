@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { FaHeart } from 'react-icons/fa'
 import { AuthContext } from '../../context/AuthProvider'
 import { toast } from 'react-toastify';
-import useCart from '../../hooks/useCart';
+import { useCart } from '../../hooks/useHooks';
 const Cards = ({ item }) => {
   const { name, image, price, recipe, _id } = item;
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ const Cards = ({ item }) => {
         image
       }
       console.log(cartItem)
-      fetch('http://localhost:3001/v1/food/carts',
+      fetch(`${import.meta.env.VITE_API}/food/carts`,
         {
           method: 'POST',
           headers: {
@@ -54,7 +54,7 @@ const Cards = ({ item }) => {
   return (
     <>
       <div className="card shadow-xl relative mr-5 md:my-5">
-        <div
+        {/* <div
           className={`rating gap-1 absolute right-0 top-0 p-4 heartStar bg-Orange 
           ${isHeartFilled ? "text-rose-500" : "text-white"
             }
@@ -62,18 +62,28 @@ const Cards = ({ item }) => {
           onClick={handleHeartClick}
         >
           <FaHeart className="w-5 h-5 cursor-pointer" />
-        </div>
+        </div> */}
 
-        <Link to={`/menu/${item._id}`}>
+        <Link to={`/detail/${item._id}`}>
           <figure>
-            <img src={item.image} alt="Shoes" className="hover:scale-105 transition-all duration-300 md:h-72" />
+            <img src={item.image} alt="Shoes"
+              className="hover:scale-105 transition-all duration-300 md:h-72" />
           </figure>
         </Link>
         <div className="card-body">
           <Link to={`/menu/${item._id}`}>
-            <h2 className="card-title">{item.name}!</h2>
+            <h2 className="card-title custom-text">{item.name}!</h2>
           </Link>
-          <p>Description of the item</p>
+          <p className='custom-text'>{item.recipe}</p>
+          <div className='flex justify-end'>
+            <div className="rating gap-1">
+              <input type="radio" name="rating-3" className="mask w-4 h-4 mask-heart bg-rose-400" />
+              <input type="radio" name="rating-3" className="mask w-4 h-4 mask-heart bg-amber-300" />
+              <input type="radio" name="rating-3" className="mask w-4 h-4 mask-heart bg-yellow-400" />
+              <input type="radio" name="rating-3" className="mask w-4 h-4 mask-heart bg-lime-400" />
+              <input type="radio" name="rating-3" className="mask w-4 h-4 mask-heart bg-green-400" />
+            </div>
+          </div>
           <div className="card-actions justify-between items-center mt-2">
             <h5 className="font-semibold">
               <span className="text-sm text-red">$ </span> {item.price}

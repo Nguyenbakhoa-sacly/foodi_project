@@ -3,9 +3,10 @@ import { useForm } from "react-hook-form"
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { FaGoogle, FaFacebookF, FaGithub } from 'react-icons/fa'
 import { AuthContext } from '../../context/AuthProvider'
+import axios from 'axios'
 
 const Modal = () => {
-  const { signUpWithGamil, login } = useContext(AuthContext);
+  const { signUpWithGamil, login, user, updateUserProfile } = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState('')
 
   // redirecting to home page or specifig page
@@ -15,40 +16,56 @@ const Modal = () => {
 
   const {
     register,
-    handleSubmit,
+    handleSubmit, reset,
     watch,
     formState: { errors },
   } = useForm();
 
-
   const onSubmit = (data) => {
     const { email, password } = data;
-    console.log(email, password)
+    console.log(data)
     login(email, password)
       .then((result) => {
         const user = result.user;
+        updateUserProfile(data.name, data.photoURL)
+          .then(() => {
+            const userInfo = {
+              name: data.name,
+              email: data.email,
+            }
+            axios.post(`${import.meta.env.VITE_API}/users`,
+              userInfo).then((res) => {
+                alert('Signup successful!');
+                navigate(from, { replace: true })
+              });
+          });
         alert('Login successful!')
+        reset();
         document.getElementById("my_modal_5").close()
         navigate(from, { replace: true })
       }).catch((error) => {
         const errorMessage = error.message;
-        setErrorMessage('Provider a correct email and password!')
+        setErrorMessage('Mật khẩu hoặc email không đúng!')
       });
   }
 
   //login with email
   const handleLogin = () => {
-    signUpWithGamil().then((result) => {
-      const user = result.user;
-      console.log(user);
-      alert('Login successful!')
-      navigate(from, { replace: true })
-
-    }).catch((error) => {
-      console.log(error)
-    });
+    signUpWithGamil()
+      .then(result => {
+        const user = result.user;
+        const userInfo = {
+          name: user?.displayName,
+          email: user?.email,
+        }
+        axios.post(`${import.meta.env.VITE_API}/users`,
+          userInfo).then((res) => {
+            alert('Signup successful!');
+            navigate('/')
+          })
+      })
+      .catch(err => { console.log(err) });
   }
-
   return (
     <dialog id="my_modal_5"
       className="modal modal-middle sm:modal-middle">
@@ -57,7 +74,6 @@ const Modal = () => {
         <form className="card-body"
           onSubmit={handleSubmit(onSubmit)}
           method='dialog'>
-
           {/* email */}
           <div className="form-control">
             <label className="label">

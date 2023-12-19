@@ -2,13 +2,16 @@ import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { AuthContext } from '../../context/AuthProvider'
 const Profile = ({ user }) => {
-  const { logOut } = useContext(AuthContext)
+  const { logOut } = useContext(AuthContext);
+
   const handleLogout = () => {
     logOut()
-      .then(() => {
+      .then((res) => {
         alert('Logged out successfully!')
       })
-      .catch(() => { })
+      .catch((err) => {
+        alert('Logged out failed!')
+      })
   }
   return (
     <>
@@ -29,7 +32,8 @@ const Profile = ({ user }) => {
                       alt="Tailwind CSS Navbar component"
                       src={user.photoURL}
                     />
-                    : <img alt="Tailwind CSS Navbar component" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                    : <img alt="Tailwind CSS Navbar component"
+                      src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
                 }
               </div>
             </label>
@@ -46,16 +50,17 @@ const Profile = ({ user }) => {
                 <Link to="/update-profile">Profile</Link>
               </li>
               <li>
-                <a>Order</a>
+                <Link to='/order'>Order</Link>
               </li>
               <li>
                 <a>Setting</a>
               </li>
+              <li>
+                <Link to={'/dashboard'}>Dashboard</Link>
+              </li>
               <hr />
               <li>
-                <a
-                  onClick={handleLogout}
-                >Logout</a>
+                <Link onClick={handleLogout} >Logout</Link>
               </li>
             </ul>
           </div>

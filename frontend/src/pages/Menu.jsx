@@ -15,7 +15,7 @@ const Menu = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("http://localhost:3001/v1/food/product");
+        const res = await fetch(`${import.meta.env.VITE_API}/food/product`);
         const data = await res.json();
         // console.log(data);
         setMenu(data);
@@ -141,6 +141,7 @@ const Menu = () => {
               >
                 Drinks
               </button>
+
             </div>
 
             {/* filter options */}
@@ -154,7 +155,7 @@ const Menu = () => {
                 value={sortOption}
                 className="bg-black text-white px-2 py-1 rounded-sm"
               >
-                <option value="default"> Default</option>
+                <option value="default">Default</option>
                 <option value="A-Z">A-Z</option>
                 <option value="Z-A">Z-A</option>
                 <option value="low-to-high">Low to High</option>

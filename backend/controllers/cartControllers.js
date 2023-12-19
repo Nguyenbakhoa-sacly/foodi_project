@@ -23,7 +23,7 @@ const cartControllers = {
       const cartItem = await newCartItem.save();
       res.status(200).json(cartItem);
     } catch (err) {
-      return res.status(500).json(err);
+      return res.status(500).json({ message: err.message });
     }
   },
 
@@ -34,7 +34,7 @@ const cartControllers = {
       const cartItem = await Cart.find({ email: email })
       res.status(200).json(cartItem)
     } catch (err) {
-      return res.status(400).json(err)
+      return res.status(400).json({ message: err.message })
     }
   },
 
@@ -45,11 +45,11 @@ const cartControllers = {
       const product = await Cart.findByIdAndDelete({ _id: id });
       // Nếu không tìm thấy sản phẩm, trả về lỗi
       if (!product) {
-        return res.status(400).json('Product not found');
+        return res.status(400).json({ message: 'Product not found' });
       }
-      res.status(200).json('Product deleted successfully')
+      res.status(200).json({ message: 'Product deleted successfully' })
     } catch (err) {
-      return res.status(500).json(err)
+      return res.status(500).json({ message: err.message })
     }
   },
 
@@ -61,16 +61,16 @@ const cartControllers = {
       const result = await Cart.findById({ _id: id })
       // Nếu không tìm thấy sản phẩm, trả về lỗi
       if (!result) {
-        return res.status(400).json('Product not found');
+        return res.status(400).json({ message: 'Product not found' });
       }
       // Cập nhật số lượng sản phẩm
       result.quantity = quantity;
       // result.price = price;
       await result.save();
       // Trả về phản hồi thành công
-      res.status(200).json('Product updated successfully!!!');
+      res.status(200).json({ message: 'Product updated successfully!!!' });
     } catch (e) {
-      res.status(500).json('Product updated failed!!!');
+      res.status(500).json({ message: 'Product updated failed!!!' });
     }
   }
 }

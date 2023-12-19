@@ -1,24 +1,24 @@
 import React, { useContext } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate }
+  from 'react-router-dom'
 import { useForm } from "react-hook-form"
-import { FaGoogle, FaFacebookF, FaGithub } from 'react-icons/fa'
+import { FaGoogle, FaFacebookF, FaGithub }
+  from 'react-icons/fa'
 import Modal from '../modal/Modal'
 import { AuthContext } from '../../context/AuthProvider'
+import axios from 'axios'
 
 const Signup = () => {
-
   // redirecting to home page or specifig page
   const location = useLocation();
   const navigate = useNavigate();
   const from = location.state?.from?.pathname || '/';
-
-  const {
-    register,
-    handleSubmit,
-    watch,
+  const { register, handleSubmit,
+    watch, reset,
     formState: { errors },
   } = useForm()
-  const { createUser } = useContext(AuthContext);
+  const { createUser, updateUserProfile,
+    signUpWithGamil } = useContext(AuthContext);
 
   const onSubmit = (data) => {
     const { email, password } = data;
@@ -26,9 +26,20 @@ const Signup = () => {
       .then((result) => {
         // Signed up 
         const user = result.user;
-        alert('Signup successful!');
+        console.log(user);
+        updateUserProfile(data.name, data.photoURL)
+          .then(() => {
+            const userInfo = {
+              name: data.name,
+              email: data.email,
+            }
+            axios.post(`${import.meta.env.VITE_API}/users`,
+              userInfo).then((res) => {
+                alert('Signup successful!');
+                navigate(from, { replace: true })
+              });
+          });
         document.getElementById("my_modal_5").close()
-        navigate(from, { replace: true })
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -37,13 +48,43 @@ const Signup = () => {
       });
   }
 
+  // login with google
+  const handleLogin = () => {
+    signUpWithGamil()
+      .then(result => {
+        const user = result.user;
+        const userInfo = {
+          name: user?.displayName,
+          email: user?.email,
+        }
+        axios.post(`${import.meta.env.VITE_API}/users`,
+          userInfo).then((res) => {
+            alert('Signup successful!');
+            navigate('/')
+          })
+      })
+      .catch(err => { console.log(err) });
+  }
+
   return (
     <div className=' max-w-md bg-white shadow w-full mx-auto my-20 items-center justify-center '>
       <h3 className='font-bold text-3xl text-orange text-center'>Create Account!</h3>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="card-body">
-
+        {/* name */}
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text">Name</span>
+          </label>
+          <input
+            type="name"
+            placeholder="name"
+            className="input input-bordered"
+            required
+            {...register("name")}
+          />
+        </div>
         {/* email */}
         <div className="form-control">
           <label className="label">
@@ -101,7 +142,7 @@ const Signup = () => {
       <div className="text-center space-x-3 pb-8">
         <button
           className="btn btn-circle hover:bg-Orange hover:text-white"
-        // onClick={handleLogin}
+          onClick={handleLogin}
         >
           <FaGoogle />
         </button>

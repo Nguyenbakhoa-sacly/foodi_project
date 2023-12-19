@@ -6,10 +6,12 @@ import HomePage from '../pages/HomePage'
 import CartPage from '../pages/CartPage'
 import Menu from '../pages/Menu'
 import UpdateProfilePage from '../pages/UpdateProfilePage'
-import Signup from '../components/signup/signup'
+import DetailProduct from '../pages/DetailProduct'
+import Signup from '../components/signup/Signup'
 import PrivateRouter from '../components/privateRouter/PrivateRouter'
 import Dashboard from '../components/dashboard/admin/Dashboard'
 import Users from '../components/dashboard/admin/Users'
+import NewProduct from '../components/dashboard/admin/NewProduct'
 const router = createBrowserRouter([
 
   {
@@ -31,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: "/cart-page",
         element: <CartPage />
+      },
+      {
+        path: "/detail/:id",
+        element: <DetailProduct />
       }
     ]
   },
@@ -47,6 +53,10 @@ const router = createBrowserRouter([
       {
         path: 'users',
         element: <Users />
+      },
+      {
+        path: 'newproduct',
+        element: <NewProduct />
       }
     ]
   },

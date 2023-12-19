@@ -39,8 +39,9 @@ const SpeciaDishes = () => {
   const [recipes, setRecipes] = useState([]);
   const slider = React.useRef(null);
 
+
   useEffect(() => {
-    fetch("http://localhost:3001/v1/food/product")
+    fetch(`${import.meta.env.VITE_API}/food/product`)
       .then(res => res.json())
       .then(data => {
         const specials = data.filter(
