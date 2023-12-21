@@ -5,7 +5,7 @@ import { AuthContext } from '../../../context/AuthProvider';
 const NewProduct = () => {
 
   const [name, setName] = useState('');
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState(null);
   const [photoUrl, setPhotoUrl] = useState('');
   const [category, setCategory] = useState('CATEGORY');
   const [recipe, setRecipe] = useState('');
@@ -23,7 +23,7 @@ const NewProduct = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(productItem),
+          body: JSON.stringify(productItem)
         }
       )
         .then((res) => res.json())
@@ -52,7 +52,7 @@ const NewProduct = () => {
               type="number"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
-              placeholder="Price product"
+              placeholder="0.00"
               className="input input-bordered w-full" />
           </div>
           {/* <input type="file" className="file-input file-input-bordered w-full " /> */}

@@ -1,79 +1,124 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useContext, useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { AuthContext } from '../context/AuthProvider';
+import { toast } from 'react-toastify';
+import { useCart } from '../hooks/useHooks';
+import { IoMdArrowBack } from "react-icons/io";
+
 
 const DetailProduct = () => {
   const param = useParams();
+  const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+  const [cart, refetch] = useCart();
   const [detail, setDetail] = useState([]);
+  const [quantity, setQuantity] = useState(1);
+  const [dataRelate, setDataRelate] = useState([]);
   const { id } = param;
 
   useEffect(() => {
     axios.post(`${import.meta.env.VITE_API}/food/product/${id}`)
       .then((res) => setDetail(res.data))
+  }, []);
 
-  }, [])
 
-  console.log(detail)
+  const handleAddCart = (item) => {
+    const { name, image, price, recipe, _id } = item;
+    if (user && user?.email) {
+      const cartItem = {
+        menuItemId: _id,
+        email: user.email,
+        quantity: quantity,
+        name,
+        price,
+        image
+      }
+      console.log(cartItem)
+      fetch(`${import.meta.env.VITE_API}/food/carts`,
+        {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(cartItem),
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          refetch();
+          toast.success("Add to cart successfully!!!")
+        })
+    } else {
+      toast.error("You are not logged in ?")
+    }
+  };
+
+  const handleDecrease = () => {
+    if (quantity === 1) {
+      return quantity
+    }
+    setQuantity(quantity - 1)
+  };
+
+  const handleIncrease = () => {
+    setQuantity(quantity + 1)
+  };
+  const handleBack = () => {
+    navigate('/menu')
+  }
+
+  // data fakes
+  useEffect(() => {
+    axios.get(`/menu.json`)
+      .then((res) => setDataRelate(res.data.splice(0, 4)))
+  }, []);
   return (
     <>
       <div className=' max-w-screen-2xl container mx-auto xl:px-24 px-4 from-[#FAFAFA] from-0%
       to-[#FCFCFC] to-100%'>
         <div className='py-24 '>
-
-          <div class="max-w-7xl mx-auto mt-6">
-            <div class="flex flex-col md:flex-row">
-              <div class="md:flex-1 px-4">
+          <button
+            onClick={() => handleBack()}
+            className='btn btn-circle'>
+            <IoMdArrowBack className='w-5 h-5' />
+          </button>
+          <div className="max-w-7xl mx-auto mt-2">
+            <div className="flex flex-col md:flex-row">
+              <div className="md:flex-1 px-4">
                 <div >
-                  <div class="h-64 md:h-80 flex justify-center items-center rounded-lg mb-4">
+                  <div className="h-64 md:h-80 flex justify-center items-center rounded-lg mb-4">
                     <img src={detail.image} alt="" />
                   </div>
-                  <div className='grid grid-cols-4 gap-4'>
-                    <div class="h-20 xl:h-40 rounded-lg bg-gray-100 mb-4 flex items-center justify-center">
-                      <span class="text-5xl">1</span>
-                    </div>
-
-                    <div class="h-20 xl:h-40 rounded-lg bg-gray-100 mb-4 flex items-center justify-center">
-                      <span class="text-5xl">2</span>
-                    </div>
-
-                    <div class="h-20 xl:h-40 rounded-lg bg-gray-100 mb-4 flex items-center justify-center">
-                      <span class="text-5xl">3</span>
-                    </div>
-
-                    <div class="h-20 xl:h-40 rounded-lg bg-gray-100 mb-4 flex items-center justify-center">
-                      <span class="text-5xl">4</span>
-                    </div>
-
+                  <div className='grid grid-cols-4 mb-4 gap-4'>
+                    {
+                      dataRelate && dataRelate.map(
+                        (item, index) => (
+                          <div key={index} className="avatar ">
+                            <div className="w-28 rounded">
+                              <img src={item.image} />
+                            </div>
+                          </div>
+                        ))
+                    }
                   </div>
-
-                  {/* <div class="flex -mx-2 mb-4">
-                    <template x-for="i in 4">
-              <div class="flex-1 px-2">
-                <button x-on:click="image = i" :class="{ 'ring-2 ring-indigo-300 ring-inset': image === i }" class="focus:outline-none w-full rounded-lg h-24 md:h-32 bg-gray-100 flex items-center justify-center">
-                  <span x-text="i" class="text-2xl"></span>
-                </button>
-              </div>
-            </template>
-                  </div> */}
                 </div>
               </div>
-              <div class="md:flex-1 px-4">
-                <h2 class="mb-2 leading-tight tracking-tight font-bold text-gray-800 text-2xl 
+              <div className="md:flex-1 px-4">
+                <h2 className="mb-2 leading-tight tracking-tight font-bold text-gray-800 text-2xl 
                 md:text-3xl">{detail.name}</h2>
-                <p class="text-gray-500 text-sm">
+                <p className="text-gray-500 text-sm">
                   {detail.category}
                 </p>
-                <div class="flex items-center space-x-4 my-4">
+                <div className="flex items-center space-x-4 my-4">
                   <div>
-                    <div class="rounded-lg bg-gray-100 flex py-2 px-3">
-                      <span class=" mr-1 text-orange mt-1">$</span>
-                      <span class="font-bold text-3xl">{detail.price}</span>
+                    <div className="rounded-lg bg-gray-100 flex py-2 px-3">
+                      <span className=" mr-1 text-orange mt-1">$</span>
+                      <span className="font-bold text-3xl">{detail.price}</span>
                     </div>
                   </div>
-
                 </div>
-
-                <p class="text-gray-500">{detail.recipe}</p>
+                <p className="text-gray-500">{detail.recipe}</p>
                 <div className='flex my-3 justify-start'>
                   <div className="rating gap-1">
                     <input type="radio" name="rating-3" className="mask w-4 h-4 mask-heart bg-rose-400" />
@@ -83,25 +128,23 @@ const DetailProduct = () => {
                     <input type="radio" name="rating-3" className="mask w-4 h-4 mask-heart bg-green-400" />
                   </div>
                 </div>
-                <div class="flex py-4 space-x-4">
-                  <div class="relative">
-                    <div class="text-center left-0 pt-2 right-0 absolute block text-xs uppercase text-gray-400 tracking-wide font-semibold">Qty</div>
-                    <select class="cursor-pointer appearance-none rounded-xl border border-gray-200 pl-4 pr-8 h-14 flex items-end pb-1">
-                      <option>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                      <option>4</option>
-                      <option>5</option>
-                    </select>
-                    <svg class="w-5 h-5 text-gray-400 absolute right-0 bottom-0 mb-2 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
-                    </svg>
-                  </div>
-
-                  <button type="button" class="h-14 px-6 py-2 font-semibold rounded-xl bg-Orange hover:bg-amber-500 text-white">
+                <div className="flex py-2 space-x-4 items-center">
+                  <button
+                    onClick={() => handleDecrease()}
+                    className='btn bg-Orange text-white hover:bg-amber-500 btn-xs btn-circle'>-</button>
+                  <input type="text "
+                    className='w-10 mx-2 text-center'
+                    value={quantity}
+                    onChange={(e) => { }}
+                  />
+                  <button
+                    onClick={() => handleIncrease()}
+                    className='btn bg-Orange text-white hover:bg-amber-500 btn-xs btn-circle'>+</button>
+                  <button type="button"
+                    onClick={() => handleAddCart(detail)}
+                    className="h-14 px-6 py-2 font-semibold rounded-xl bg-Orange hover:bg-amber-500 text-white">
                     Add to Cart
                   </button>
-
                 </div>
               </div>
             </div>
